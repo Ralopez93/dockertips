@@ -1,0 +1,56 @@
+FROM almalinux:9.8
+
+# Add Repositories
+## Adding epel for screen and xclock 
+RUN dnf -y install epel-release 
+
+# Update repo db
+RUN dnf -y update 
+
+# Installing
+## Various deps 
+RUN dnf -y install vim man screen xdg-utils xorg-x11-xauth
+
+## Python dependencies - note the crb repo install for venv dependencies
+RUN dnf -y --enablerepo=crb install python python3-pip python3-virtualenv
+## Broken meld dependencies in Alma Linux
+RUN dnf -y install python3-cairo python3-gobject
+## Python dependencies used in some of the tutorial exercises to generate data
+RUN dnf -y install python3-numpy
+
+## Unix utilities 
+RUN dnf -y install findutils gawk grep
+
+## Compilation/Build tools
+RUN dnf -y install git make cmake gcc-c++ gcc binutils patch
+
+# Environment
+## Dir for course specific material
+ENV TOOLSDAY_WORKDIR=/opt
+## Dir for all downloads
+ENV TOOLSDAY_DOWNLOADS=${TOOLSDAY_WORKDIR}/download
+RUN mkdir ${TOOLSDAY_DOWNLOADS}
+## Dir for all sources, a subfolder for each source tree
+ENV TOOLSDAY_SOURCEDIR=${TOOLSDAY_WORKDIR}/source
+RUN mkdir $TOOLSDAY_SOURCEDIR
+## Dir for all builds, a subfolder for each build environment
+ENV TOOLSDAY_BUILDDIR=${TOOLSDAY_WORKDIR}/build
+RUN mkdir $TOOLSDAY_BUILDDIR
+## Dir for all binaries, a subfolder for each software
+ENV TOOLSDAY_APPS=${TOOLSDAY_WORKDIR}/apps
+RUN mkdir ${TOOLSDAY_APPS}
+## Dir for all scripts
+ENV TOOLSDAY_SCRIPTS=${TOOLSDAY_WORKDIR}/scripts
+RUN mkdir ${TOOLSDAY_SCRIPTS}
+
+# Add all scripts in a scripts folder. Note that paths are relative to the
+# path where the Dockerfile is
+ADD scripts/* ${TOOLSDAY_SCRIPTS}/
+
+# Run bash as the container starts - Don't do this!
+# Better to use the container as an environment instead of an app.
+# If you need a terminal, pass bash as an argument to the container instead
+# Or use the docker exec command
+#CMD ["/bin/bash"]
+
+
