@@ -1,0 +1,35 @@
+FROM almalinux:9.8
+
+# Add required system packages 
+
+# Environment and folder creation
+## Dir for course specific material
+ENV TOOLSDAY_OPTDIR=/opt
+## Dir for all downloads
+ENV TOOLSDAY_DOWNLOADDIR=${TOOLSDAY_OPTDIR}/download
+RUN mkdir ${TOOLSDAY_DOWNLOADDIR}
+## Dir for all sources, a subfolder for each source tree
+ENV TOOLSDAY_SOURCEDIR=${TOOLSDAY_OPTDIR}/source
+RUN mkdir $TOOLSDAY_SOURCEDIR
+## Dir for all builds, a subfolder for each build environment
+ENV TOOLSDAY_BUILDDIR=${TOOLSDAY_OPTDIR}/build
+RUN mkdir $TOOLSDAY_BUILDDIR
+## Dir for all binaries, a subfolder for each software
+ENV TOOLSDAY_APPSDIR=${TOOLSDAY_OPTDIR}/apps
+RUN mkdir ${TOOLSDAY_APPSDIR}
+## Dir for all scripts
+ENV TOOLSDAY_SCRIPTSDIR=${TOOLSDAY_OPTDIR}/scripts
+RUN mkdir ${TOOLSDAY_SCRIPTSDIR}
+## Dir for sharing data with host
+ENV TOOLSDAY_SHAREDIR=${TOOLSDAY_OPTDIR}/share
+RUN mkdir ${TOOLSDAY_SHAREDIR}
+
+# Copy content from git folders
+ADD scripts ${TOOLSDAY_SCRIPTSDIR}/
+ADD source ${TOOLSDAY_SOURCEDIR}/
+ADD apps ${TOOLSDAY_APPSDIR}/
+
+# When the container is started, start a login shell that requires a command
+# This is to be able to pass commands to the container without logging 
+# in, in an environment that can also be initialized by scripts
+ENTRYPOINT ["/bin/bash","-l","-c"]
