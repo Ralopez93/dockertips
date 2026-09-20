@@ -29,12 +29,12 @@ The directory structure is as follows:
 
 ```shell
 .
-├── dockerbuild-opt-dev  # files to be copied inside the dev container during build
-├── dockerbuild-opt-prod # files to be copied inside the prod container during build 
-├── dockerfiles # dockerfiles for various use cases
 ├── README.md  # this document
-├── scripts # Example scripts to launch the dockerbuild and the launch the generated container
-├── share # folder to be mounted inside the container while working in it
+├── dockerbuild-opt-dev/  # files to be copied inside the dev container during build
+├── dockerbuild-opt-prod/ # files to be copied inside the prod container during build 
+├── dockerfiles/ # dockerfiles for various use cases
+├── scripts/ # Example scripts to launch the dockerbuild and the launch the generated container
+├── share/ # folder to be mounted inside the container while working in it
 ```
 
 # Demo files
@@ -83,6 +83,20 @@ The commands in the `run*` scripts are meant to showcase command line calls to s
 
 The template located in `dockerfiles/DOCKERFILE.template` can be used as a starting point to generate
 other containers following the suggestions in this repository.
+
+  1. Copy the the template file for your project:  
+     `cp dockerfiles/DOCKERFILE.template dockerfiles/DOCKERFILE-myproject-dev`
+  2. Build a container based on that dockerfile template:  
+     ```shell
+     cd <git repo root>
+     docker build -t <myproject:al9-dev.version> -f dockerfiles/DOCKERFILE-myproject-dev .
+     ```
+  3. Start a docker container and execute the commands needed to initialize the application,
+     taking notes of what is needed. Edit the `dockerfiles/DOCKERFILE-myproject-dev` accordingly.
+  4. Iterate 1-3 until the resulting build container suits your needs
+  5. Use the container for development by mounting the share folder at start:
+     `docker run -it -v $(pwd)/share:/opt/share <myproject:al9-dev.version> bash`
+  6. Code inside the /opt/share folder so that the result exists also outside the container
 
 # References
 
