@@ -104,8 +104,8 @@ other containers following the suggestions in this repository.
 
 # References
 
-[1] pyenv <https://github.com/pyenv/pyenv>
-[2] Numpy <https://numpy.org/>
-[3] Docker Engine documentation <https://docs.docker.com/engine/>
+[1] pyenv <https://github.com/pyenv/pyenv>  
+[2] Numpy <https://numpy.org/>  
+[3] Docker Engine documentation <https://docs.docker.com/engine/>  
 
 
