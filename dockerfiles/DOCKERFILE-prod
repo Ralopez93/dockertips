@@ -32,6 +32,6 @@ ADD dockerbuild-opt-prod/scripts ${TOOLSDAY_SCRIPTSDIR}/
 ADD dockerbuild-opt-prod/sources ${TOOLSDAY_SOURCESDIR}/
 
 # When the container is started, start a login shell that requires a command
-# This is to be able to pass commands to the container without logging 
-# in, in an environment that can also be initialized by scripts
+# to start an interactive shell one can pass "bash" as a command
+# `docker container run -it <container name>` will automatically do that
 ENTRYPOINT ["/bin/bash","-l","-c"]
