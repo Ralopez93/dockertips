@@ -13,24 +13,33 @@ RUN dnf -y update
 # Environment and folder creation
 ## Dir for course specific material
 ENV TOOLSDAY_OPTDIR=/opt
-## Dir for all downloads
-ENV TOOLSDAY_DOWNLOADDIR=${TOOLSDAY_OPTDIR}/download
-RUN mkdir ${TOOLSDAY_DOWNLOADDIR}
-## Dir for all sources, a subfolder for each source tree
-ENV TOOLSDAY_SOURCEDIR=${TOOLSDAY_OPTDIR}/source
-RUN mkdir $TOOLSDAY_SOURCEDIR
-## Dir for all builds, a subfolder for each build environment
-ENV TOOLSDAY_BUILDDIR=${TOOLSDAY_OPTDIR}/build
-RUN mkdir $TOOLSDAY_BUILDDIR
-## Dir for all binaries, a subfolder for each software
+## Dir for all built apps, a subfolder for each software
 ENV TOOLSDAY_APPSDIR=${TOOLSDAY_OPTDIR}/apps
 RUN mkdir ${TOOLSDAY_APPSDIR}
+## Dir for all builds, a subfolder for each build environment
+ENV TOOLSDAY_BUILDDIR=${TOOLSDAY_OPTDIR}/builds
+RUN mkdir $TOOLSDAY_BUILDDIR
+## Dir for all downloads
+ENV TOOLSDAY_DOWNLOADDIR=${TOOLSDAY_OPTDIR}/downloads
+RUN mkdir ${TOOLSDAY_DOWNLOADDIR}
 ## Dir for all scripts
 ENV TOOLSDAY_SCRIPTSDIR=${TOOLSDAY_OPTDIR}/scripts
 RUN mkdir ${TOOLSDAY_SCRIPTSDIR}
-## Dir for sharing data with host
+## Dir for all sources, a subfolder for each source tree
+ENV TOOLSDAY_SOURCEDIR=${TOOLSDAY_OPTDIR}/sources
+RUN mkdir $TOOLSDAY_SOURCEDIR
+## Dir for sharing data with host, to be used when mounting
 ENV TOOLSDAY_SHAREDIR=${TOOLSDAY_OPTDIR}/share
 RUN mkdir ${TOOLSDAY_SHAREDIR}
+
+# Copy contents from git folders
+ADD dockerbuild-opt-dev/apps ${TOOLSDAY_APPSDIR}/
+ADD dockerbuild-opt-dev/builds ${TOOLSDAY_BUILDSDIR}/
+ADD dockerbuild-opt-dev/downloads ${TOOLSDAY_DOWNLOADSDIR}/
+ADD dockerbuild-opt-dev/scripts ${TOOLSDAY_SCRIPTSDIR}/
+ADD dockerbuild-opt-dev/sources ${TOOLSDAY_SOURCESDIR}/
+
+# Start application specific installation
 
 # Install pyenv
 RUN git clone https://github.com/pyenv/pyenv.git $TOOLSDAY_SOURCEDIR/pyenv
@@ -39,15 +48,13 @@ RUN cd $TOOLSDAY_SOURCEDIR/pyenv && src/configure && make -C src
 # Add env var
 ENV PYENV_ROOT=$TOOLSDAY_SOURCEDIR/pyenv
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
-# Should initialize pyenv user env
+# Should initialize pyenv user env, but does not work in a container,
+# better to hardcode paths above and use `pyenv global <pythonversion>` in scripts
 #RUN eval "$(pyenv init - bash)"
 
-# Installing python distributions using pyenv
+# Installing system-wide python distributions using pyenv
 RUN pyenv install 2.7.18
 RUN pyenv install 3.14.7
-
-# Copy content from git folders
-ADD scripts/* ${TOOLSDAY_SCRIPTSDIR}/
 
 # Run python2 installation script
 RUN ${TOOLSDAY_SCRIPTSDIR}/setuppython2.sh
@@ -56,5 +63,5 @@ RUN ${TOOLSDAY_SCRIPTSDIR}/setuppython3.sh
 
 # When the container is started, start a login shell that requires a command
 # This is to be able to pass commands to the container without logging 
-# in, in an environment that can also be initialized by scripts
+# in, in an environment that can also be initialized by scripts NOT WORKING
 ENTRYPOINT ["/bin/bash","-l","-c"]

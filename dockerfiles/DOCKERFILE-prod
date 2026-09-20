@@ -5,29 +5,31 @@ FROM almalinux:9.8
 # Environment and folder creation
 ## Dir for course specific material
 ENV TOOLSDAY_OPTDIR=/opt
-## Dir for all downloads
-ENV TOOLSDAY_DOWNLOADDIR=${TOOLSDAY_OPTDIR}/download
-RUN mkdir ${TOOLSDAY_DOWNLOADDIR}
-## Dir for all sources, a subfolder for each source tree
-ENV TOOLSDAY_SOURCEDIR=${TOOLSDAY_OPTDIR}/source
-RUN mkdir $TOOLSDAY_SOURCEDIR
-## Dir for all builds, a subfolder for each build environment
-ENV TOOLSDAY_BUILDDIR=${TOOLSDAY_OPTDIR}/build
-RUN mkdir $TOOLSDAY_BUILDDIR
-## Dir for all binaries, a subfolder for each software
+## Dir for all apps and binaries, a subfolder for each software
 ENV TOOLSDAY_APPSDIR=${TOOLSDAY_OPTDIR}/apps
 RUN mkdir ${TOOLSDAY_APPSDIR}
+## Dir for all builds, a subfolder for each software to build
+ENV TOOLSDAY_BUILDSDIR=${TOOLSDAY_OPTDIR}/build
+RUN mkdir $TOOLSDAY_BUILDSDIR
+## Dir for all downloads
+ENV TOOLSDAY_DOWNLOADSDIR=${TOOLSDAY_OPTDIR}/downloads
+RUN mkdir ${TOOLSDAY_DOWNLOADSDIR}
 ## Dir for all scripts
 ENV TOOLSDAY_SCRIPTSDIR=${TOOLSDAY_OPTDIR}/scripts
 RUN mkdir ${TOOLSDAY_SCRIPTSDIR}
+## Dir for all sources, a subfolder for each source tree
+ENV TOOLSDAY_SOURCESDIR=${TOOLSDAY_OPTDIR}/source
+RUN mkdir $TOOLSDAY_SOURCESDIR
 ## Dir for sharing data with host
 ENV TOOLSDAY_SHAREDIR=${TOOLSDAY_OPTDIR}/share
 RUN mkdir ${TOOLSDAY_SHAREDIR}
 
-# Copy content from git folders
-ADD scripts ${TOOLSDAY_SCRIPTSDIR}/
-ADD source ${TOOLSDAY_SOURCEDIR}/
-ADD apps ${TOOLSDAY_APPSDIR}/
+# Copy contents from git folders
+ADD dockerbuild-opt-prod/apps ${TOOLSDAY_APPSDIR}/
+ADD dockerbuild-opt-prod/builds ${TOOLSDAY_BUILDSDIR}/
+ADD dockerbuild-opt-prod/downloads ${TOOLSDAY_DOWNLOADSDIR}/
+ADD dockerbuild-opt-prod/scripts ${TOOLSDAY_SCRIPTSDIR}/
+ADD dockerbuild-opt-prod/sources ${TOOLSDAY_SOURCESDIR}/
 
 # When the container is started, start a login shell that requires a command
 # This is to be able to pass commands to the container without logging 
