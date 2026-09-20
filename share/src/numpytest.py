@@ -1,9 +1,6 @@
-#!/usr/bin/python 
-
 # Suggestion taken from <https://numpy.org/devdocs/numpy_2_0_migration_guide.html>
 
 import numpy as np
-
 
 myfloat = np.float32(3) + 3.
 
