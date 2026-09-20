@@ -1,0 +1,45 @@
+FROM almalinux:9.8
+
+# Add required system packages 
+# generic and pyenv installation
+#RUN dnf -y install packagename
+
+RUN dnf -y update
+
+# Environment and folder creation
+## Dir for course specific material
+ENV TOOLSDAY_OPTDIR=/opt
+## Dir for all built apps, a subfolder for each software
+ENV TOOLSDAY_APPSDIR=${TOOLSDAY_OPTDIR}/apps
+RUN mkdir ${TOOLSDAY_APPSDIR}
+## Dir for all builds, a subfolder for each build environment
+ENV TOOLSDAY_BUILDSDIR=${TOOLSDAY_OPTDIR}/builds
+RUN mkdir $TOOLSDAY_BUILDSDIR
+## Dir for all downloads
+ENV TOOLSDAY_DOWNLOADSDIR=${TOOLSDAY_OPTDIR}/downloads
+RUN mkdir ${TOOLSDAY_DOWNLOADSDIR}
+## Dir for all scripts
+ENV TOOLSDAY_SCRIPTSDIR=${TOOLSDAY_OPTDIR}/scripts
+RUN mkdir ${TOOLSDAY_SCRIPTSDIR}
+## Dir for all sources, a subfolder for each source tree
+ENV TOOLSDAY_SOURCESDIR=${TOOLSDAY_OPTDIR}/sources
+RUN mkdir $TOOLSDAY_SOURCESDIR
+## Dir for sharing data with host, to be used when mounting
+ENV TOOLSDAY_SHAREDIR=${TOOLSDAY_OPTDIR}/share
+RUN mkdir ${TOOLSDAY_SHAREDIR}
+
+# Copy contents from git folders
+ADD dockerbuild-opt-dev/apps ${TOOLSDAY_APPSDIR}/
+ADD dockerbuild-opt-dev/builds ${TOOLSDAY_BUILDSDIR}/
+ADD dockerbuild-opt-dev/downloads ${TOOLSDAY_DOWNLOADSDIR}/
+ADD dockerbuild-opt-dev/scripts ${TOOLSDAY_SCRIPTSDIR}/
+ADD dockerbuild-opt-dev/sources ${TOOLSDAY_SOURCESDIR}/
+
+# Start application specific installation
+
+# required RUN and ENV directives here 
+
+# When the container is started, start a login shell that requires a command
+# to start an interactive shell one can pass "bash" as a command
+# `docker container run -it <container name>` will automatically do that
+ENTRYPOINT ["/bin/bash","-l","-c"]
