@@ -27,6 +27,7 @@ different versions of libraries and compilers.
 
 The directory structure is as follows:
 
+```shell
 .
 ├── dockerbuild-opt-dev  # files to be copied inside the dev container during build
 ├── dockerbuild-opt-prod # files to be copied inside the prod container during build 
@@ -34,6 +35,7 @@ The directory structure is as follows:
 ├── README.md  # this document
 ├── scripts # Example scripts to launch the dockerbuild and the launch the generated container
 ├── share # folder to be mounted inside the container while working in it
+```
 
 # Demo files
 
