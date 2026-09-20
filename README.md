@@ -59,11 +59,13 @@ The dev container is used to develop a certain software.
 
   1. Execute the script `scripts/builddevcontainer.sh`
   2. Start a dev container with `docker run -it toolsday:al9-dev.2026.09.22 bash`
-  3. Test installing and switching python versions using `pyenv`:  
-     `pyenv install -l`
-     `pyenv install <pythonversion>`
-     `pyenv global <pythonversion>`
-     `python --version`
+  3. Test installing and switching python versions using `pyenv`:   
+     ```shell
+     pyenv install -l
+     pyenv install <pythonversion>
+     pyenv global <pythonversion>
+     python --version
+     ```
 
 ### Building the production container
 
@@ -71,13 +73,15 @@ The production container is a slim version of the dev container without the
 library headers or source files used to build applications. 
 
   1. Execute the script `scripts/buildprodcontainer.sh`
-  2. Start the default example workflow with one of the scripts:
-     `run_prod_wrapper_task_by_pipe.sh`
-     `run_prod_wrapper_task.sh`
-  3. Create your own workflow or execute a python script using:
+  2. Start the default example workflow with one of the scripts:  
+     ```shell
+     run_prod_wrapper_task_by_pipe.sh
+     run_prod_wrapper_task.sh
+     ```  
+  3. Create your own workflow or execute a python script using:  
      `run_prod_wrapper.sh`
 
-The commands in the `run*` scripts are meant to showcase command line calls to start the container and run a job inside.
+The commands in the `run*` scripts are meant to showcase command line calls to start the container and run a job inside it.
 
 ## How to use the template
 
