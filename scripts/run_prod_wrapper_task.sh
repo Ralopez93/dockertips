@@ -7,4 +7,4 @@
 # Get repository root path if exists, else run in current folder.
 GITROOT=$(git rev-parse --show-toplevel)
 
-docker run --rm --mount type=bind,source="$GITROOT"/share,target=/opt/share toolsday:al9.2026.09.22 /opt/share/scripts/workflow.sh
+docker run --rm --mount type=bind,source="$GITROOT"/share,target=/opt/share toolsday:al9.2026.09.22 /opt/share/scripts/workflow_withshare.sh
